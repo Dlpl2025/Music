@@ -150,6 +150,7 @@
 </head>
 <body>
 
+  <!-- Header -->
   <header>
     <div class="header-left">
       <i class="fa-solid fa-magnifying-glass"></i>
@@ -162,6 +163,7 @@
     </div>
   </header>
 
+  <!-- Filter Category -->
   <div class="filter-container">
     <select id="albumFilter">
       <option value="">All Albums</option>
@@ -174,21 +176,17 @@
     </select>
   </div>
 
+  <!-- Music Cards -->
   <main class="music-list" id="trackContainer"></main>
 
+  <!-- Bottom Audio Player -->
   <div class="player-bar">
     <div class="current-info" id="currentTrack">Select a track to play</div>
     <audio id="audioElement" controls></audio>
   </div>
 
   <script>
-    // Sample Data: Telegram link ba direct MP3 link boshabe 'url'-e
-    const songs = [
-      { id: 1, title: "Track One", artist: "Artist A", album: "Album 1", year: "2024", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-      { id: 2, title: "Track Two", artist: "Artist B", album: "Album 2", year: "2023", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-      { id: 3, title: "Track Three", artist: "Artist A", album: "Album 1", year: "2024", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-      { id: 4, title: "Track Four", artist: "Artist C", album: "Album 3", year: "2022", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
-    ];
+    let songs = [];
 
     const trackContainer = document.getElementById("trackContainer");
     const audio = document.getElementById("audioElement");
@@ -198,8 +196,23 @@
     const artistFilter = document.getElementById("artistFilter");
     const yearFilter = document.getElementById("yearFilter");
 
-    // Populate dropdowns
+    // ব্যাকএন্ড API থেকে স্বয়ংক্রিয় গান লোড করা
+    async function fetchSongs() {
+      try {
+        const res = await fetch("http://localhost:5000/api/songs");
+        songs = await res.json();
+        initFilters();
+        renderList(songs);
+      } catch (err) {
+        console.error("Error loading tracks:", err);
+      }
+    }
+
     function initFilters() {
+      albumFilter.innerHTML = '<option value="">All Albums</option>';
+      artistFilter.innerHTML = '<option value="">All Artists</option>';
+      yearFilter.innerHTML = '<option value="">All Years</option>';
+
       const albums = [...new Set(songs.map(s => s.album))];
       const artists = [...new Set(songs.map(s => s.artist))];
       const years = [...new Set(songs.map(s => s.year))];
@@ -209,7 +222,6 @@
       years.forEach(y => yearFilter.innerHTML += `<option value="${y}">${y}</option>`);
     }
 
-    // Render Cards
     function renderList(list) {
       trackContainer.innerHTML = "";
       if (list.length === 0) {
@@ -235,7 +247,6 @@
       currentTrackText.innerText = `Playing: ${song.title} - ${song.artist}`;
     }
 
-    // Filter & Search Logic
     function applyFilters() {
       const q = searchInput.value.toLowerCase();
       const alb = albumFilter.value;
@@ -258,9 +269,7 @@
     artistFilter.addEventListener("change", applyFilters);
     yearFilter.addEventListener("change", applyFilters);
 
-    // Run on start
-    initFilters();
-    renderList(songs);
+    fetchSongs();
   </script>
 </body>
 </html>
