@@ -1,12 +1,12 @@
 {
-  "name": "YouTube Music Pro",
-  "short_name": "Music Pro",
-  "description": "High Quality 320kbps Online Music Streamer & Player",
+  "name": "Bdey Music",
+  "short_name": "BdeymusiC",
+  "description": "High Quality 320kbps Online Music Streamer &amp; Player",
   "start_url": "./index.html",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#030303",
-  "theme_color": "#030303",
+  "theme_color": "#3d1e1e",
   "icons": [
     {
       "src": "icon.png",
@@ -20,5 +20,11 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "id": "1.01",
+  "lang": "en",
+  "categories": [
+    "multimedia",
+    "music"
   ]
 }
